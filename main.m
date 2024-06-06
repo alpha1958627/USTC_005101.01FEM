@@ -26,27 +26,6 @@ mu = 0.3;
 %thickness
 t = 1;
 
-
-
-
-
-
-
-
-
-% for i = 1:number_boundary_ele
-%    p1 = node_coordinates(boundary_ele_nodes(i,1),:);
-%    p2 = node_coordinates(boundary_ele_nodes(i,2),:);
-% %    n1 = boundary_ele_nodes(i,1);
-% %    n2 = boundary_ele_nodes(i,2);
-% %    
-% %    txt1 = string(n1);
-% %    txt2 = string(n2);
-%    
-%    plot([p1(1),p2(1)],[p1(2),p2(2)],'k-');
-%    hold on;
-% end
-
 start = [0,3]; last = [0,5.196];
 [path1,path2] = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
 
@@ -92,8 +71,6 @@ boundary_free_2 = path2_global;
 clear path1 path2 path1_global path2_global
 start = [0,5.196]; last = [3.2,5.196];
 [path1,path2] = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
-% disp(path1)
-% plot(boundary_coordinates(path1,1),boundary_coordinates(path1,2))
 
 path1_global = get_index_from_other_coor(path1',boundary_coordinates,node_coordinates);
 
@@ -101,7 +78,6 @@ path2_global = get_index_from_other_coor(path2',boundary_coordinates,node_coordi
 
 boundary_force = path1_global;%应力
 
-% disp(boundary_force)
 
 
 %删掉重复的点
@@ -128,36 +104,7 @@ for i =1:number_elements
 end
     clear r1 r2 r3 n1 n2 n3 ele_dof i
 
-
-    
-    % % nx = -1.196/(1.196*1.196+3.2*3.2)^0.5;
-    % % ny = 3.2/(1.196*1.196+3.2*3.2)^0.5;
-    % %  = [ny,-nx;nx,ny];
-    
-    % for i = 1:size(boundary_normal_constraint,2)
-    %     Trans_dof(2*i-1) = boundary_normal_constraint(i)*2-1;
-    %     Trans_dof(2*i) = boundary_normal_constraint(i)*2;
-    % end
-    % clear i
-    
-    % % NOT_TRANS_dof = setdiff(1:number_dofs,Trans_dof);
-    
-    % Trans = zeros(number_dofs);
-    % Trans(NOT_TRANS_dof,NOT_TRANS_dof) = diag(ones(number_dofs-size(boundary_normal_constraint,2)*2,1));
-    
-    % tmp = repmat({},size(boundary_normal_constraint,2),1);
-    % Trans(Trans_dof,Trans_dof) = blkdiag(tmp{:});
-    
-    % % K_ = Trans*K*Trans';
-    % clear tmp
-    
-    
-    %%设置边界条件
-    %force
-    
-    
-    
-    
+ 
     total_dofs = [1:number_dofs]';
 
     force_act_dofs = [boundary_fixed'*2-1;boundary_fixed'*2;boundary_normal_constraint'*2-1];
