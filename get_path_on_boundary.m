@@ -1,4 +1,4 @@
-function [path1,path2] = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes)
+function minpath= get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes)
     
     start = find(ismember(boundary_coordinates,start,'rows'));
     last = find(ismember(boundary_coordinates,last,'rows'));
@@ -35,6 +35,11 @@ function [path1,path2] = get_path_on_boundary(start,last,boundary_coordinates,bo
         path2(n) = k;
         
     end
-    
+
+    if (length(path1) < length(path2))
+  minpath = path1;
+    else
+  minpath = path2;
+    end
 
 end

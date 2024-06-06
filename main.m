@@ -1,6 +1,5 @@
 clear
-% 打开文件
-% 初始化变量
+
 [node_coordinates,element_nodes] = readComsolField('2mesh.txt');
 [boundary_coordinates,boundary_nodes]= readComsolBoundary('2b.txt');
 
@@ -26,59 +25,45 @@ mu = 0.3;
 %thickness
 t = 1;
 
+
+%--------------------------------------------------------------------------------------------------------
 start = [0,3]; last = [0,5.196];
-[path1,path2] = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
 
-path1_global = get_index_from_other_coor(path1',boundary_coordinates,node_coordinates);
+minpath = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
 
-path2_global = get_index_from_other_coor(path2',boundary_coordinates,node_coordinates);
+boundary_normal_constraint = get_index_from_other_coor(minpath',boundary_coordinates,node_coordinates);
 
-% disp(path1_global)
-boundary_normal_constraint = path1_global;%对称边界条件
-
-
-clear path1 path2 path1_global path2_global
-
+clear minpath
+%--------------------------------------------------------------------------------------------------------
 start = [3,0]; last = [6,0];
-[path1,path2] = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
+minpath = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
 
-path1_global = get_index_from_other_coor(path1',boundary_coordinates,node_coordinates);
+boundary_fixed =  get_index_from_other_coor(minpath',boundary_coordinates,node_coordinates);
+clear minpath
+%--------------------------------------------------------------------------------------------------------
 
-path2_global = get_index_from_other_coor(path2',boundary_coordinates,node_coordinates);
 
-boundary_fixed = path2_global;%固定边界条件
-
-clear path1 path2 path1_global path2_global
 start = [3,0]; last = [0,3];
-[path1,path2] = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
+minpath = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
 
-path1_global = get_index_from_other_coor(path1',boundary_coordinates,node_coordinates);
+boundary_free_1=  get_index_from_other_coor(minpath',boundary_coordinates,node_coordinates);
 
-path2_global = get_index_from_other_coor(path2',boundary_coordinates,node_coordinates);
+clear minpath
+%--------------------------------------------------------------------------------------------------------
 
-boundary_free_1 = path1_global;
-
-clear path1 path2 path1_global path2_global
 start = [3.2,5.196]; last = [6,0];
-[path1,path2] = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
+minpath = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
 
-path1_global = get_index_from_other_coor(path1',boundary_coordinates,node_coordinates);
+boundary_free_2 =  get_index_from_other_coor(minpath',boundary_coordinates,node_coordinates);
+clear minpath
+%--------------------------------------------------------------------------------------------------------
 
-path2_global = get_index_from_other_coor(path2',boundary_coordinates,node_coordinates);
-
-boundary_free_2 = path2_global;
-
-clear path1 path2 path1_global path2_global
 start = [0,5.196]; last = [3.2,5.196];
-[path1,path2] = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
+minpath = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
 
-path1_global = get_index_from_other_coor(path1',boundary_coordinates,node_coordinates);
-
-path2_global = get_index_from_other_coor(path2',boundary_coordinates,node_coordinates);
-
-boundary_force = path1_global;%应力
-
-
+boundary_force =  get_index_from_other_coor(minpath',boundary_coordinates,node_coordinates);
+clear minpath
+%--------------------------------------------------------------------------------------------------------
 
 %删掉重复的点
 k = size(boundary_free_1,2);
@@ -104,7 +89,6 @@ for i =1:number_elements
 end
     clear r1 r2 r3 n1 n2 n3 ele_dof i
 
- 
     total_dofs = [1:number_dofs]';
 
     force_act_dofs = [boundary_fixed'*2-1;boundary_fixed'*2;boundary_normal_constraint'*2-1];
@@ -124,8 +108,10 @@ end
     node_coordinates([boundary_force],1)
     F(boundary_force *2) = 0.4*k*node_coordinates([boundary_force],1);
     F(boundary_force([1,size(boundary_force,2)])  *2) = [0.2*0.2*k*0.5,3.0*0.2*k*0.5];   
-    % F(boundary_force *2)
-    % sum(F(boundary_force *2))
+    % F(boundary_force *2) = 0.4*1000;
+    % F(boundary_force([1,size(boundary_force,2)])  *2) = 0.2*1000; 
+    F(boundary_force *2)
+    sum(F(boundary_force *2))
     
     
     U(disp_act_dofs) = K(disp_act_dofs,disp_act_dofs)\(F(force_pre_dofs)-K(disp_act_dofs,disp_pre_dofs)*U(disp_pre_dofs));
