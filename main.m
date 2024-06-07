@@ -1,7 +1,7 @@
 clear
-
-[node_coordinates,element_nodes] = readComsolField('2mesh.txt');
-[boundary_coordinates,boundary_nodes]= readComsolBoundary('2b.txt');
+clc
+[node_coordinates,element_nodes] = readComsolField('mesh.txt');
+[boundary_coordinates,boundary_nodes]= readComsolBoundary('boundary.txt');
 
 number_nodes = size(node_coordinates,1);
 number_elements = size(element_nodes,1);
@@ -24,7 +24,6 @@ E = 200000000000;
 mu = 0.3;
 %thickness
 t = 1;
-
 
 %--------------------------------------------------------------------------------------------------------
 start = [0,3]; last = [0,5.196];
@@ -103,33 +102,19 @@ end
     disp_pre_dofs = tmp;
   %约定好的唯一自由度
     disp_act_dofs = setdiff(total_dofs,disp_pre_dofs);
-    
-    k=-5000/3.2;
-    node_coordinates([boundary_force],1)
-    F(boundary_force *2) = 0.4*k*node_coordinates([boundary_force],1);
-    F(boundary_force([1,size(boundary_force,2)])  *2) = [0.2*0.2*k*0.5,3.0*0.2*k*0.5];   
-    % F(boundary_force *2) = 0.4*1000;
-    % F(boundary_force([1,size(boundary_force,2)])  *2) = 0.2*1000; 
-    F(boundary_force *2)
-    sum(F(boundary_force *2))
-    
+
+    F(boundary_force*2)=discretize_linear_load(boundary_force,element_nodes,node_coordinates) ;
     
     U(disp_act_dofs) = K(disp_act_dofs,disp_act_dofs)\(F(force_pre_dofs)-K(disp_act_dofs,disp_pre_dofs)*U(disp_pre_dofs));
-    % U(disp_act_dofs) = K(disp_act_dofs,disp_act_dofs)\F(force_pre_dofs)
     F = K * U;
-    i=3;
-    disp('0,5.196')
-    U([2*i-1,2*i])
-    i=180;
-    disp('6,0')
-    U([2*i-1,2*i])
-    i=61;
+    i=61 ;
     disp('3.2,5.196')
     U([2*i-1,2*i])
 
-    
 
-    
+
+
+
     
     
 
