@@ -28,14 +28,13 @@ t = 1;
 ```
 - Boundary conditions
 ```
-start = [0,3]; last = [0,5.196]; %start point and ending point of BC
-[path1,path2] = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
+start = [0,3]; last = [0,5.196];
 
-path1_global = get_index_from_other_coor(path1',boundary_coordinates,node_coordinates);
+minpath = get_path_on_boundary(start,last,boundary_coordinates,boundary_nodes);
 
-path2_global = get_index_from_other_coor(path2',boundary_coordinates,node_coordinates);
+boundary_normal_constraint = get_index_from_other_coor(minpath',boundary_coordinates,node_coordinates);
 
-boundary_normal_constraint = path1_global;%symmetric
+clear minpath
 ```
 - Applying Boundary Loads
   
