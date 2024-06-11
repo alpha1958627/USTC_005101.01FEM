@@ -25,8 +25,6 @@ mu = 0.3;
 %thickness
 t = 1;
 
-
-
 %--------------------------------------------------------------------------------------------------------
 start = [0,3]; last = [0,5.196];
 
@@ -109,20 +107,19 @@ end
     
     U(disp_act_dofs) = K(disp_act_dofs,disp_act_dofs)\(F(force_pre_dofs)-K(disp_act_dofs,disp_pre_dofs)*U(disp_pre_dofs));
     F = K * U;
-    
-    input_vertex = [3.2,5.196];
-    Stress = getstress(input_vertex,U,node_coordinates,element_nodes,E,mu);
-    [maxF,indexofmaxF] = getmaxstress(U,node_coordinates,element_nodes,E,mu)
-    % 显示结果
+    n1=60 ;
+    n2 = 61;
+    n3 = 50;
+    U([2*i-1,2*i])
+    U()
+    K_ele(:,:,91)
+
+
 
  
 
-    % node_coordinates(109,:)
-    % node_coordinates(117,:)
-    % node_coordinates(118,:)
-    % (node_coordinates(109,:)+node_coordinates(117,:)  + node_coordinates(118,:))/3
     
-   
+    
 
 
 
